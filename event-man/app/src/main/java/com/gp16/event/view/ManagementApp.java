@@ -235,46 +235,6 @@ public class ManagementApp {
     }
 
     // --- NEW: Bulk assignment dialog ---
-    /* 
-    private static void showBulkAssignDialog() {
-        List<Attendee> employees = attendeeService.getAllAttendees();
-        List<Event> stores = eventService.getAllEvents();
-
-        DefaultListModel<String> empListModel = new DefaultListModel<>();
-        for (Attendee a : employees) {
-            empListModel.addElement(a.getId() + " - " + a.getName());
-        }
-        JList<String> empList = new JList<>(empListModel);
-        empList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        JScrollPane empScroll = new JScrollPane(empList);
-
-        JComboBox<String> storeDropdown = new JComboBox<>();
-        for (Event store : stores) {
-            storeDropdown.addItem(store.getName());
-        }
-
-        Object[] message = {
-            "Select Employees:", empScroll,
-            "Assign to Store:", storeDropdown
-        };
-
-        int option = JOptionPane.showConfirmDialog(null, message, "Bulk Assign Employees", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-            String selectedStore = (String) storeDropdown.getSelectedItem();
-            for (String selectedValue : empList.getSelectedValuesList()) {
-                String empId = selectedValue.split(" - ")[0];
-                Attendee a = employees.stream().filter(emp -> emp.getId().equals(empId)).findFirst().orElse(null);
-                if (a != null) {
-                    a.setStatus(selectedStore);
-                    attendeeService.updateAttendee(a);
-                }
-            }
-            loadEmployees();
-            loadAssignments();
-        }
-    }
-    */
-
     private static void showBulkAssignDialog() {
         List<Attendee> employees = attendeeService.getAllAttendees();
         List<Event> stores = eventService.getAllEvents();
@@ -320,6 +280,30 @@ public class ManagementApp {
         int option = JOptionPane.showConfirmDialog(null, message, "Bulk Assign Employees", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
             String selectedStore = (String) storeDropdown.getSelectedItem();
+            Event selectedEvent = stores.stream()
+                .filter(store -> store.getName().equals(selectedStore))
+                .findFirst()
+                .orElse(null);
+
+            if (selectedEvent != null) {
+                // Count current employees assigned to this store
+                long currentEmployees = employees.stream()
+                    .filter(emp -> selectedStore.equals(emp.getStatus()))
+                    .count();
+
+                // Count how many new employees are being assigned
+                int newAssignments = empList.getSelectedValuesList().size();
+
+                if (currentEmployees + newAssignments > selectedEvent.getCapacity()) {
+                    JOptionPane.showMessageDialog(null,
+                        "Cannot assign employees: Store '" + selectedStore + "' has a capacity of " + selectedEvent.getCapacity() + 
+                        " employees. Currently has " + currentEmployees + " employees, and you're trying to add " + newAssignments + " more.",
+                        "Capacity Limit Exceeded",
+                        JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+
             for (String selectedValue : empList.getSelectedValuesList()) {
                 String empId = selectedValue.split(" - ")[0];
                 Attendee a = employees.stream().filter(emp -> emp.getId().equals(empId)).findFirst().orElse(null);
@@ -413,12 +397,34 @@ public class ManagementApp {
 
         int option = JOptionPane.showConfirmDialog(null, message, "Add Employee", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
+            String selectedStore = (String) storeDropdown.getSelectedItem();
+            if (!"Unassigned".equals(selectedStore)) {
+                // Find the selected store
+                Event selectedEvent = eventService.getAllEvents().stream()
+                    .filter(store -> store.getName().equals(selectedStore))
+                    .findFirst()
+                    .orElse(null);
+
+                if (selectedEvent != null) {
+                    // Count current employees assigned to this store
+                    long currentEmployees = attendeeService.getAllAttendees().stream()
+                        .filter(emp -> selectedStore.equals(emp.getStatus()))
+                        .count();
+
+                    if (currentEmployees >= selectedEvent.getCapacity()) {
+                        JOptionPane.showMessageDialog(null,
+                            "Cannot add employee: Store '" + selectedStore + "' has reached its maximum capacity of " + selectedEvent.getCapacity() + " employees.",
+                            "Capacity Limit Reached",
+                            JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
             Attendee a = new Attendee();
             a.setName(nameField.getText());
             a.setPosition(positionField.getText());
             a.setFullTime(fullTimeBox.isSelected());
-
-            String selectedStore = (String) storeDropdown.getSelectedItem();
             a.setStatus(selectedStore != null ? selectedStore : "Unassigned");
 
             attendeeService.addAttendee(a);
