@@ -72,7 +72,7 @@ set CLASSPATH=%APP_HOME%\lib\app.jar;%APP_HOME%\lib\guava-33.0.0-jre.jar;%APP_HO
 
 
 @rem Execute app
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %APP_OPTS%  -classpath "%CLASSPATH%" com.gp16.event.view.ManagementApp %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %APP_OPTS%  -classpath "%CLASSPATH%" com.gp16.event.EventManagerApp %*
 
 :end
 @rem End local scope for the variables with windows NT shell

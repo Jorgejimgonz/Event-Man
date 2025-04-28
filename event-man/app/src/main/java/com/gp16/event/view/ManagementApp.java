@@ -7,6 +7,7 @@ import com.gp16.event.model.Attendee;
 import com.gp16.event.service.EventService;
 import com.gp16.event.service.AttendeeService;
 import com.gp16.event.util.DatabaseConnection;
+import com.gp16.event.util.DateTimeUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +16,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Vector;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ManagementApp {
     private static EventService eventService;
@@ -23,6 +26,7 @@ public class ManagementApp {
     private static JTable eventTable;
     private static DefaultTableModel attendeeTableModel;
     private static JTable attendeeTable;
+    private static JLabel timeLabel;
 
     public static void main(String[] args) {
         var db = DatabaseConnection.connect();
@@ -38,6 +42,24 @@ public class ManagementApp {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
+
+        // Create main panel with BorderLayout
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        
+        // Create top panel for timestamp
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        timeLabel = new JLabel(DateTimeUtil.getCurrentDateTime());
+        timeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        topPanel.add(timeLabel);
+        
+        // Create timer to update time every second
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timeLabel.setText(DateTimeUtil.getCurrentDateTime());
+            }
+        });
+        timer.start();
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -142,7 +164,11 @@ public class ManagementApp {
 
         tabbedPane.addTab("Assignments", assignmentPanel);
 
-        frame.add(tabbedPane);
+        // Add all components to the main panel
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        frame.add(mainPanel);
+
         loadStores();
         loadEmployees();
         frame.setVisible(true);

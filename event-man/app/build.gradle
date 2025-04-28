@@ -38,7 +38,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.gp16.event.view.ManagementApp'
+    mainClass = 'com.gp16.event.EventManagerApp'
 }
 
 tasks.named('test') {

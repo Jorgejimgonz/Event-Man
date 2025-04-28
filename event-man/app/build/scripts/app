@@ -210,7 +210,7 @@ DEFAULT_JVM_OPTS=""
 
 set -- \
         -classpath "$CLASSPATH" \
-        com.gp16.event.view.ManagementApp \
+        com.gp16.event.EventManagerApp \
         "$@"
 
 # Stop when "xargs" is not available.
