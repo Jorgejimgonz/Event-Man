@@ -68,11 +68,11 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\app.jar;%APP_HOME%\lib\guava-33.0.0-jre.jar;%APP_HOME%\lib\mongodb-driver-sync-4.7.1.jar;%APP_HOME%\lib\failureaccess-1.0.2.jar;%APP_HOME%\lib\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;%APP_HOME%\lib\jsr305-3.0.2.jar;%APP_HOME%\lib\checker-qual-3.41.0.jar;%APP_HOME%\lib\error_prone_annotations-2.23.0.jar;%APP_HOME%\lib\mongodb-driver-core-4.7.1.jar;%APP_HOME%\lib\bson-record-codec-4.7.1.jar;%APP_HOME%\lib\bson-4.7.1.jar
+set CLASSPATH=%APP_HOME%\lib\app.jar;%APP_HOME%\lib\guava-33.0.0-jre.jar;%APP_HOME%\lib\mongodb-driver-sync-4.7.1.jar;%APP_HOME%\lib\flatlaf-intellij-themes-3.4.jar;%APP_HOME%\lib\flatlaf-3.4.jar;%APP_HOME%\lib\failureaccess-1.0.2.jar;%APP_HOME%\lib\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;%APP_HOME%\lib\jsr305-3.0.2.jar;%APP_HOME%\lib\checker-qual-3.41.0.jar;%APP_HOME%\lib\error_prone_annotations-2.23.0.jar;%APP_HOME%\lib\mongodb-driver-core-4.7.1.jar;%APP_HOME%\lib\bson-record-codec-4.7.1.jar;%APP_HOME%\lib\bson-4.7.1.jar
 
 
 @rem Execute app
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %APP_OPTS%  -classpath "%CLASSPATH%" com.gp16.event.view.ManagementApp %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %APP_OPTS%  -classpath "%CLASSPATH%" com.gp16.event.EventManagerApp %*
 
 :end
 @rem End local scope for the variables with windows NT shell
