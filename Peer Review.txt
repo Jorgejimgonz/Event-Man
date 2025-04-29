@@ -1,24 +1,24 @@
 Peer Review:
 
 Eric's evaluation:
-Ava Martinez 10
-Ethan Brown 10
-Sophia Davis 10
+Jorge 10
+Alex 10
+Wesley 10
 
 Jorge’s evaluation
-Liam Johnson 10
-Ethan Brown 10
-Sophia Davis 10
+Eric 10
+Alex 10
+Wesley 10
 
 Alex’s evaluation
-Liam Johnson 10
-Ava Martinez 10
-Sophia Davis 10
+Jorge 10
+Eric 10
+Wesley 10
 
 Wesley's evaluation
-Liam Johnson 10
-Ava Martinez 10
-Ethan Brown 10
+Jorge 10
+Alex 10
+Eric 10
 
    .-~~^-.
  .'  O    \
